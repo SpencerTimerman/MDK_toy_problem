@@ -85,6 +85,12 @@ class Candidate:
         # so we compare their words
         return cmp(other.getWord(), self.word)
 
+    #I'm just overwriting this because:
+    # <Word_Predictor.Candidate instance at 0x0000000002C448C8>
+    # is not a helpful description of these objects
+    def __repr__(self):
+        return str(tuple([self.word, self.confidence]))
+
 
 class TestCandidate(unittest.TestCase):
 
@@ -145,6 +151,14 @@ class TestCandidate(unittest.TestCase):
         with self.assertRaises(ValueError):
             Candidate(word = "test", confidence = -100)
 
+    def test_comparison(self):
+        candidate_a_1       = Candidate("a",1)
+        candidate_a_2       = Candidate("a",2)
+        candidate_b_1       = Candidate("b",1)
+        candidate_b_2       = Candidate("b",2)
+        candidates    = [candidate_a_1,candidate_a_2,candidate_b_1,candidate_b_2]
+        correct_order = [candidate_a_2,candidate_b_2,candidate_a_1,candidate_b_1]
+        self.assertEqual(sorted(candidates,reverse=True),correct_order)
 
 
 
