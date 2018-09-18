@@ -1,0 +1,2 @@
+To Run the unit tests within the code:
+> python -m unittest -v Word_Predictor

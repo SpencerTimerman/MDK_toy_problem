@@ -38,18 +38,55 @@ class Candidate:
     def getConfidence(self):
         return self.confidence
 
+import unittest
+class TestCandidate(unittest.TestCase):
 
-def test_Candidate():
-    word1       = "test"
-    confidence1 = "3"
-    candidate1  = Candidate(word1,confidence1)
+    def test_creation(self):
+        word_1       = "test"
+        confidence_1 = 3
+        candidate_1  = Candidate(word = word_1, confidence = confidence_1)
+        self.assertEqual(candidate_1.getWord(),word_1)
+        self.assertEqual(candidate_1.getConfidence(),confidence_1)
+ 
+        word_2       = "testing"
+        confidence_2 = 1
+        candidate_2  = Candidate(word = word_2, confidence = confidence_2)
+        self.assertEqual(candidate_2.getWord(),word_2)
+        self.assertEqual(candidate_2.getConfidence(),confidence_2)
 
-    assert word1 != candidate1.getWord()
-    assert confidence1 != candidate1.getConfidence()
+    def test_type_errors(self):
+        with self.assertRaises(TypeError):
+            Candidate(word = 1, confidence = 1)
 
-    word2       = "testing"
-    confidence2 = "1"
-    candidate2  = Candidate(word2,confidence2)
+        with self.assertRaises(TypeError):
+            Candidate(word = 1, confidence = "no")
+
+        with self.assertRaises(TypeError):
+            Candidate(word = "yes", confidence = "1")
+
+        with self.assertRaises(TypeError):
+            Candidate(word = "test", confidence = {})
+
+        with self.assertRaises(TypeError):
+            Candidate(word = "fire", confidence = None)
+
+        with self.assertRaises(TypeError):
+            Candidate(word = {}, confidence = 1)
+
+        with self.assertRaises(TypeError):
+            Candidate(word = None, confidence = 1)
+
+
+    def test_value_errors(self):
+        with self.assertRaises(ValueError):
+            Candidate(word = "test", confidence = 0)
+
+        with self.assertRaises(ValueError):
+            Candidate(word = "test", confidence = -1)
+
+        with self.assertRaises(ValueError):
+            Candidate(word = "test", confidence = -100)
+
 
 
 
@@ -62,3 +99,7 @@ class AutocompleteProvider:
 
     def train(self, passage):
         pass
+
+
+if __name__ == "__main__":
+    unittest.main()
