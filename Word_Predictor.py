@@ -75,6 +75,16 @@ class Candidate:
         """
         return self.confidence
 
+    #We are overwriting the comparison operator so that we can sort on both the
+    # confidence and the word
+    def __cmp__(self,other):
+        conf_difference = self.confidence - other.getConfidence()
+        if conf_difference != 0:
+            return conf_difference
+        #otherwise they are equal
+        # so we compare their words
+        return cmp(other.getWord(), self.word)
+
 
 class TestCandidate(unittest.TestCase):
 
@@ -161,13 +171,11 @@ class AutocompleteProvider:
         candidates = [ Candidate(word, self.model[word]) for word in candidate_words ]
 
         #The candidate list must be sorted by confidence, (and then alphabetically by 
-        # the word?) we will use the python built-in function to sort, and provide a 
-        # function to extract what data to sort on, and reverse it since it sorts low 
-        # to high.
-        sorted_candidates = sorted(
-                candidates, 
-                key = lambda cand : cand.getConfidence(), 
-                reverse = True)
+        # the word?) we will use the python built-in function to sort, and use the 
+        # Candidate class's overwitten comparator function to ensure the Candidated are
+        # sorted primarily by confidence and secondarily alphabetically. We need to 
+        # reverse it, as `sorted` naturally sorts low to high.
+        sorted_candidates = sorted(candidates,reverse=True)
 
         return sorted_candidates
 
@@ -198,7 +206,7 @@ class TestAutocompleteProvider(unittest.TestCase):
         thi_words = [ cand.getWord() for cand in thi]
         self.assertEqual(thi_words, ["thing","think","third","this"])
         thi_confs = [ cand.getConfidence() for cand in thi]
-        self.assertEqual(thi_words, [2,1,1,1])
+        self.assertEqual(thi_confs, [2,1,1,1])
 
 
         #Input: "nee" --> "need" (1)
@@ -206,7 +214,7 @@ class TestAutocompleteProvider(unittest.TestCase):
         nee_words = [ cand.getWord() for cand in nee]
         self.assertEqual(nee_words, ["need"])
         nee_confs = [ cand.getConfidence() for cand in nee]
-        self.assertEqual(nee_words, [1])
+        self.assertEqual(nee_confs, [1])
 
 
         #Input: "th" --> "that" (2), "thing" (2), "think" (1), "this" (1), "third" (1), "the" (1), "thoroughly" (1)
@@ -214,7 +222,7 @@ class TestAutocompleteProvider(unittest.TestCase):
         th_words = [ cand.getWord() for cand in th]
         self.assertEqual(th_words, ["that","thing","the","think","third","this","thoroughly"])
         th_confs = [ cand.getConfidence() for cand in th]
-        self.assertEqual(th_words, [2,2,1,1,1,1,1])
+        self.assertEqual(th_confs, [2,2,1,1,1,1,1])
 
 if __name__ == "__main__":
     unittest.main()
