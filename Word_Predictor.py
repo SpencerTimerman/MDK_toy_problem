@@ -158,6 +158,7 @@ class TestCandidate(unittest.TestCase):
         candidate_b_2       = Candidate("b",2)
         candidates    = [candidate_a_1,candidate_a_2,candidate_b_1,candidate_b_2]
         correct_order = [candidate_a_2,candidate_b_2,candidate_a_1,candidate_b_1]
+        #Note: The reverse=True is because `sorted` sorts from low to high 
         self.assertEqual(sorted(candidates,reverse=True),correct_order)
 
 
@@ -168,6 +169,8 @@ class AutocompleteProvider:
         # tallies. This seems the most effective way to store the data, especially
         # if it is going to be run on a large dataset (such as the first time it is
         # installed on a phone and would need to ingest their entire SMS history)
+        # This was the best balance of simplicity and efficiency. For greater 
+        # efficiency, I'd probably impliment a bloom filter.
         self.model = collections.Counter()
 
     def getWords(self, fragment):
