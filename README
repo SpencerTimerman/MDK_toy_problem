@@ -1,2 +1,17 @@
+To build: Nothing! Have python 2.7 installed.
+I was using Python 2.7.3 while developing this.
+To check your python version:
+> python --version
+
+Normally I'd put this code in python package so that tools
+like pip can easily work with it. However, this code is so
+small it's hard to justify the overhead and complexity and 
+risk the inability to run it.
+
 To Run the unit tests within the code:
 > python -m unittest -v Word_Predictor
+
+To Run the small manual testing mode (for custom testing)
+> python Word_Predictor.py 
+
+

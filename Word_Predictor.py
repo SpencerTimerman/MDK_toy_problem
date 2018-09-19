@@ -238,5 +238,26 @@ class TestAutocompleteProvider(unittest.TestCase):
         th_confs = [ cand.getConfidence() for cand in th]
         self.assertEqual(th_confs, [2,2,1,1,1,1,1])
 
+
+def main():
+    #quick little wrapper function to allow easy interaction with these
+    # libraries. This is to allow manual and custom testing, and not the
+    # inteded way for these libraries to be used.
+    autocomp = AutocompleteProvider()
+    
+    text = None
+    print "Type sentences to train, type parts of words to get candidates, leave empty to exit"
+    while text is not "":
+        text = raw_input("> ")
+        #if there are spaces in it, assume it is a sentence
+        if " " in text:
+            autocomp.train(text)
+        #Else if it's non empty, assume it wants an auto-complete
+        elif len(text) > 0:
+            candidates = autocomp.getWords(text)
+            print candidates
+
+
+
 if __name__ == "__main__":
-    unittest.main()
+    main()
